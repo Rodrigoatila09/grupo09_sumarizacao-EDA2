@@ -70,4 +70,64 @@ class MaxHeap:
 
         return maximo
 
+def construir_tabela_hash_origem(frases: list) -> dict:
+  
+    return {frase["id_global"]: frase["id_artigo"] for frase in frases}
+
+
+def selecionar_resumo(
+    scores_pagerank: dict,
+    matriz_similaridade: list,
+    n_frases_resumo: int,
+    limiar_redundancia: float = 0.5,
+) -> list:
+
+    heap_candidatas = MaxHeap()
+    for id_frase, score in scores_pagerank.items():
+        heap_candidatas.inserir(score, id_frase)
+
+    ids_selecionados = []
+
+    while not heap_candidatas.esta_vazio() and len(ids_selecionados) < n_frases_resumo:
+        _score, id_candidata = heap_candidatas.extrair_maximo()
+
+        eh_redundante = any(
+            matriz_similaridade[id_candidata][id_escolhida] >= limiar_redundancia
+            for id_escolhida in ids_selecionados
+        )
+
+        if not eh_redundante:
+            ids_selecionados.append(id_candidata)
+      
+    return ids_selecionados
+
+
+if __name__ == "__main__":
+  
+    import os
+    from preprocess import carregar_frases_da_pasta
+    from graph import construir_matriz_similaridade, Grafo
+    from pagerank import calcular_pagerank
+
+    pasta_exemplo = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        "data",
+        "jogo01",
+    )
+    frases = carregar_frases_da_pasta(pasta_exemplo)
+    matriz_sim = construir_matriz_similaridade(frases)
+    grafo = Grafo.construir_a_partir_da_similaridade(matriz_sim, limiar=0.05)
+    scores, _ = calcular_pagerank(grafo)
+
+    tabela_origem = construir_tabela_hash_origem(frases)
+
+    ids_resumo = selecionar_resumo(
+        scores, matriz_sim, n_frases_resumo=6, limiar_redundancia=0.5
+    )
+
+    print(f"Frases selecionadas para o resumo ({len(ids_resumo)}):\n")
+    for id_frase in ids_resumo:
+        frase = frases[id_frase]
+        origem = tabela_origem[id_frase]
+        print(f"- {frase['texto_original']}  [fonte: {origem}]")
 
