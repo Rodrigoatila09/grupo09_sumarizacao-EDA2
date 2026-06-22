@@ -1,3 +1,7 @@
+D_AMORTECIMENTO = 0.85
+MAX_ITERACOES = 100
+TOLERANCIA_CONVERGENCIA = 1e-4
+
 def calcular_pagerank(grafo, d: float = D_AMORTECIMENTO,
                        max_iter: int = MAX_ITERACOES,
                        tolerancia: float = TOLERANCIA_CONVERGENCIA):
