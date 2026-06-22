@@ -15,10 +15,6 @@ N_FRASES_RESUMO_DEFAULT = 6
 
 
 def executar_pipeline(nome_jogo: str, n_frases_resumo: int) -> None:
-    """
-    Executa o pipeline completo para a pasta data/<nome_jogo>/ e imprime
-    o resumo final (em Markdown) seguido do relatório de análise.
-    """
     pasta_jogo = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "data", nome_jogo
     )
