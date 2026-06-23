@@ -66,9 +66,6 @@ adjacência, já que uma é construída diretamente a partir da outra.
 
 ## Relatório de análise (`analysis.py`)
 
-Em vez de métricas estatísticas (ROUGE, redução de redundância etc.),
-`analysis.py` imprime um relatório legível com:
-
 1. todos os vértices/frases com seu score de PageRank, em ordem decrescente;
 2. as arestas de maior peso de similaridade do grafo;
 3. quais frases entraram no resumo final, com a fonte de cada uma;
